@@ -2,7 +2,7 @@
 
 A local AI chatbot built with **Python**, **Streamlit**, and **Ollama**.
 
-Chat-Bot provides a modern web interface for interacting with locally running Large Language Models (LLMs), with support for real-time streaming, multiple conversations, model selection, custom system prompts, and optional local conversation storage.
+Chat-Bot provides a modern web interface for interacting with locally running Large Language Models (LLMs), with support for real-time streaming, multiple conversations, model selection, custom system prompts, optional local conversation storage, and both development and installed launchers.
 
 ---
 
@@ -14,7 +14,8 @@ Chat-Bot provides a modern web interface for interacting with locally running La
 * 🧠 Multiple Ollama model support
 * 💬 Multiple conversations
 * 🔄 Switch between conversations
-* 🗑️ Create and delete conversations
+* ➕ Create new conversations
+* 🗑️ Delete conversations
 * 🌡️ Temperature control
 * 🧠 Context length configuration
 * 📝 Custom system prompts
@@ -22,13 +23,18 @@ Chat-Bot provides a modern web interface for interacting with locally running La
 * 📄 JSON-based conversation storage
 * 🖥️ Streamlit web interface
 * 💻 CLI interface
+* 🐧 Linux support
+* 🪟 Windows support
+* ▶️ Development runner scripts
+* 📦 Installable application launcher
+* 🧹 Uninstallation scripts
 * 🧩 Modular project architecture
 
 ---
 
 ## 🏗️ Architecture
 
-The project separates the chatbot logic, Ollama communication, validation, and user interface into independent components.
+The project separates the chatbot logic, Ollama communication, validation, storage, and user interface into independent components.
 
 ```text
 Chat-Bot/
@@ -59,20 +65,30 @@ Chat-Bot/
 ├── LICENSE
 ├── README.md
 ├── pyproject.toml
-└── requirements.txt
+├── requirements.txt
+│
+├── run.sh
+├── install.sh
+├── uninstall.sh
+│
+├── run.bat
+├── install.bat
+└── uninstall.bat
 ```
 
 ---
 
 ## 🧰 Technologies
 
-| Technology | Purpose                        |
-| ---------- | ------------------------------ |
-| Python     | Core programming language      |
-| Streamlit  | Web interface                  |
-| Ollama     | Local LLM runtime              |
-| Requests   | HTTP communication with Ollama |
-| JSON       | Conversation storage           |
+| Technology    | Purpose                                 |
+| ------------- | --------------------------------------- |
+| Python        | Core programming language               |
+| Streamlit     | Web interface                           |
+| Ollama        | Local LLM runtime                       |
+| Requests      | HTTP communication with Ollama          |
+| JSON          | Conversation storage                    |
+| Bash          | Linux runner and installation scripts   |
+| Windows Batch | Windows runner and installation scripts |
 
 ---
 
@@ -84,64 +100,16 @@ Before running the project, make sure you have:
 * Ollama
 * At least one Ollama model
 * `pip`
-* A supported operating system such as Linux, macOS, or Windows
+* A supported operating system:
 
----
+  * Linux
+  * Windows
+  * macOS for manual development execution
 
-# 🚀 Installation
+For the automated installation scripts, the supported platforms are currently:
 
-## 1. Clone the Repository
-
-```bash
-git clone <YOUR_REPOSITORY_URL>
-cd Chat-Bot
-```
-
----
-
-## 2. Create a Virtual Environment
-
-Linux / macOS:
-
-```bash
-python -m venv .venv
-```
-
-Windows:
-
-```powershell
-python -m venv .venv
-```
-
----
-
-## 3. Activate the Virtual Environment
-
-### Linux / macOS
-
-```bash
-source .venv/bin/activate
-```
-
-### Windows
-
-```powershell
-.venv\Scripts\activate
-```
-
----
-
-## 4. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-For development, install the project itself in editable mode:
-
-```bash
-pip install -e .
-```
+* Linux
+* Windows
 
 ---
 
@@ -151,7 +119,13 @@ Chat-Bot uses Ollama to run AI models locally.
 
 Make sure Ollama is installed on your system.
 
-Start the Ollama server:
+Official website:
+
+```text
+https://ollama.com
+```
+
+Start the Ollama server manually if it is not already running:
 
 ```bash
 ollama serve
@@ -167,7 +141,7 @@ If the server is working, Ollama will return information about the installed mod
 
 ---
 
-## 📥 Install a Model
+## 📥 Install an Ollama Model
 
 For example:
 
@@ -181,19 +155,382 @@ You can see your installed models with:
 ollama list
 ```
 
-The application automatically retrieves the available models from Ollama, so you don't need to hard-code model names inside the application.
+The application automatically retrieves the available models from Ollama, so you do not need to hard-code model names inside the application.
 
 ---
 
-# ▶️ Run the Application
+# 🚀 Installation
 
-From the project root:
+There are two ways to use Chat-Bot:
+
+1. Development mode
+2. Installed application mode
+
+---
+
+# 🛠️ Development Mode
+
+Development mode runs the project directly from its current directory.
+
+This mode is useful when developing or modifying the source code.
+
+## 1. Clone the Repository
+
+```bash
+git clone <YOUR_REPOSITORY_URL>
+cd Chat-Bot
+```
+
+---
+
+## 2. Create a Virtual Environment
+
+### Linux / macOS
+
+```bash
+python3 -m venv .venv
+```
+
+### Windows
+
+```powershell
+python -m venv .venv
+```
+
+---
+
+## 3. Activate the Virtual Environment
+
+### Linux / macOS
+
+```bash
+source .venv/bin/activate
+```
+
+### Windows CMD
+
+```bat
+.venv\Scripts\activate
+```
+
+### Windows PowerShell
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+---
+
+## 4. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+For development, you can also install the project in editable mode:
+
+```bash
+pip install -e .
+```
+
+---
+
+# ▶️ Run in Development Mode
+
+## Linux / macOS
+
+You can run the application directly with Streamlit:
 
 ```bash
 streamlit run app/streamlit_app.py
 ```
 
-Streamlit will start the local web server and provide a URL for the application.
+Or use the development runner:
+
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+The Linux development runner:
+
+* Activates the project virtual environment
+* Checks the project structure
+* Checks Ollama
+* Starts Ollama if it is not already running
+* Starts Streamlit
+* Displays log file locations
+* Stops the processes when requested
+
+To stop the application:
+
+```text
+q
+```
+
+Or press:
+
+```text
+Ctrl+C
+```
+
+---
+
+## Windows
+
+You can run the application directly:
+
+```powershell
+.venv\Scripts\python.exe -m streamlit run app/streamlit_app.py
+```
+
+Or double-click:
+
+```text
+run.bat
+```
+
+The Windows development runner:
+
+* Checks Python and the virtual environment
+* Checks Ollama
+* Starts Ollama if necessary
+* Starts Streamlit
+* Displays log file locations
+* Allows stopping the application with `q`
+
+---
+
+# 📦 Installed Application Mode
+
+Installed mode copies the application into a dedicated installation directory and creates a global command named:
+
+```text
+ChatBot
+```
+
+After installation, you can run Chat-Bot from any directory.
+
+---
+
+# 🐧 Linux Installation
+
+Run the installer from the project root:
+
+```bash
+chmod +x install.sh
+./install.sh
+```
+
+The installer creates the following installation directory:
+
+```text
+/opt/ChatBot/
+```
+
+The Python virtual environment is created at:
+
+```text
+/opt/ChatBot/.venv/
+```
+
+The global launcher is created at:
+
+```text
+/usr/bin/ChatBot
+```
+
+After installation, run:
+
+```bash
+ChatBot
+```
+
+You can verify the installed command with:
+
+```bash
+which ChatBot
+```
+
+Expected output:
+
+```text
+/usr/bin/ChatBot
+```
+
+---
+
+## Linux Installation Layout
+
+After installation, the application will look similar to this:
+
+```text
+/opt/ChatBot/
+│
+├── app/
+│   └── streamlit_app.py
+│
+├── src/
+├── bots/
+├── generated/
+├── .venv/
+├── requirements.txt
+└── .env.example
+```
+
+The installed launcher uses the Python interpreter inside:
+
+```text
+/opt/ChatBot/.venv/bin/python
+```
+
+It runs the Streamlit application from:
+
+```text
+/opt/ChatBot/app/streamlit_app.py
+```
+
+---
+
+## Linux Uninstallation
+
+Run:
+
+```bash
+./uninstall.sh
+```
+
+The uninstaller removes:
+
+```text
+/opt/ChatBot/
+```
+
+and:
+
+```text
+/usr/bin/ChatBot
+```
+
+> **Warning:** Any installed `bots/` and `generated/` directories will also be removed. Back up important files before uninstalling.
+
+---
+
+# 🪟 Windows Installation
+
+Run the installer from the project root:
+
+```bat
+install.bat
+```
+
+You can also double-click the file in Windows Explorer.
+
+The installer creates the following installation directory:
+
+```text
+%LOCALAPPDATA%\ChatBot
+```
+
+The Python virtual environment is created at:
+
+```text
+%LOCALAPPDATA%\ChatBot\.venv
+```
+
+The global launcher is created at:
+
+```text
+%LOCALAPPDATA%\Microsoft\WindowsApps\ChatBot.bat
+```
+
+After installation, open a new CMD or PowerShell window and run:
+
+```bat
+ChatBot
+```
+
+---
+
+## Windows Installation Layout
+
+After installation, the application will look similar to this:
+
+```text
+%LOCALAPPDATA%\ChatBot/
+│
+├── app/
+│   └── streamlit_app.py
+│
+├── src/
+├── bots/
+├── generated/
+├── .venv/
+├── requirements.txt
+└── .env.example
+```
+
+The installed launcher uses:
+
+```text
+%LOCALAPPDATA%\ChatBot\.venv\Scripts\python.exe
+```
+
+and runs:
+
+```text
+%LOCALAPPDATA%\ChatBot\app\streamlit_app.py
+```
+
+---
+
+## Windows Uninstallation
+
+Run:
+
+```bat
+uninstall.bat
+```
+
+You can also double-click the file.
+
+The uninstaller removes:
+
+```text
+%LOCALAPPDATA%\ChatBot
+```
+
+and:
+
+```text
+%LOCALAPPDATA%\Microsoft\WindowsApps\ChatBot.bat
+```
+
+> **Warning:** Any installed `bots` and `generated` directories will also be removed. Back up important files before uninstalling.
+
+---
+
+## Windows Command Troubleshooting
+
+If Windows does not recognize:
+
+```bat
+ChatBot
+```
+
+try opening a new CMD or PowerShell window.
+
+You can also run the launcher directly:
+
+```bat
+"%LOCALAPPDATA%\Microsoft\WindowsApps\ChatBot.bat"
+```
+
+The following directory should be available in the user `PATH`:
+
+```text
+%LOCALAPPDATA%\Microsoft\WindowsApps
+```
 
 ---
 
@@ -454,6 +791,7 @@ For example:
 
 * Validating messages
 * Validating model names
+* Checking required values
 
 ---
 
@@ -473,6 +811,34 @@ Provides the graphical interface for:
 * Configuring generation parameters
 * Configuring system prompts
 * Enabling conversation storage
+
+---
+
+## Runner Scripts
+
+### `run.sh`
+
+Runs the project in Linux development mode.
+
+### `run.bat`
+
+Runs the project in Windows development mode.
+
+### `install.sh`
+
+Installs Chat-Bot on Linux and creates the global `ChatBot` command.
+
+### `install.bat`
+
+Installs Chat-Bot on Windows and creates the global `ChatBot` command.
+
+### `uninstall.sh`
+
+Removes the Linux installation.
+
+### `uninstall.bat`
+
+Removes the Windows installation.
 
 ---
 
@@ -531,6 +897,11 @@ Possible future improvements include:
 * Model performance monitoring
 * Docker support
 * REST API
+* Cross-platform service management
+* Automatic model installation
+* Conversation search
+* Prompt templates
+* Multiple chatbot profiles
 
 ---
 
@@ -560,4 +931,13 @@ If you find a bug or have an idea for improving the project, feel free to open a
 
 **Version:** `1.0.0`
 
-The current version focuses on providing a clean local chatbot foundation using **Ollama + Python + Streamlit**, with a modular architecture suitable for future expansion.
+The current version focuses on providing a clean local chatbot foundation using:
+
+* Python
+* Streamlit
+* Ollama
+* Local JSON conversation storage
+* Linux and Windows launcher scripts
+* Modular project architecture
+
+The project is suitable for future expansion into a more advanced local AI assistant.
